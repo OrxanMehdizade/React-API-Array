@@ -36,3 +36,142 @@
     transform: rotate(360deg);
   }
 }
+
+
+.download{
+  width: 300px;
+  height: 300px;
+  background-color: red;
+  border-radius: 50%;
+  animation: circle 1s linear infinite;
+}
+
+@keyframes circle {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.editWindow{
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  background-color: #282c34;
+}
+
+.editWindow div{
+  background-color: red;
+  padding: 30px;
+  border: 2px solid black;
+
+}
+
+.App{
+  padding-top: 15px;
+}
+
+.Goods{
+  border: 2px solid white;
+  width: 700px;
+  height: 500px;
+  margin: 15px auto ;
+  border-radius: 5px;
+  overflow-y: scroll;
+  box-shadow: 0 0 10px rgba(0,0,0,0.9);
+  & .goodsUlClass{
+    list-style-type: none;
+  }
+  & #goodsBtnId{
+    background: white;
+    border: 1px solid white;
+    margin: 15px;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.9);
+    width: 50px;
+  }
+}
+
+.Admin{
+  border: 2px solid white;
+  width: 700px;
+  height: 500px;
+  margin: 15px auto ;
+  border-radius: 5px;
+  padding: 10px;
+  overflow-y: scroll;
+  box-shadow: 0 0 10px rgba(0,0,0,0.9);
+  & .adminUlClass{
+    list-style-type: none;
+  }
+  & #searchInput{
+    border-radius: 15px;
+    width: 250px;
+    margin-left: 10px;
+    padding: 5px;
+    border: 1px solid white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.9);
+  }
+  & #adminEditBtn,#adminDelBtn{
+    background: white;
+    border: 1px solid white;
+    margin: 15px;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.9);
+  }
+  & #adminEditBtn{
+    width: 50px;
+  }
+
+}
+
+.MyBag{
+  border: 2px solid white;
+  width: 700px;
+  height: 500px;
+  margin: 15px auto ;
+  border-radius: 5px;
+  overflow-y: scroll;
+  box-shadow: 0 0 10px rgba(0,0,0,0.9);
+  & .mybagUlClass{
+    list-style-type: none;
+  }
+  & #mybagBtnId{
+    background: white;
+    border: 1px solid white;
+    margin: 15px;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.9);
+  }
+}
+
+
+
+#goodsİd,#mybagsİd,#adminİd{
+  background: white;
+  border: 1px solid white;
+  margin: 15px;
+  padding: 5px;
+  border-radius: 5px;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.9);
+}
+
+
+
+
+#goodsİd:hover,#mybagsİd:hover,#adminİd:hover,#mybagBtnId:hover,#adminEditBtn:hover,#adminDelBtn:hover,#goodsBtnId:hover{
+  background: #61dafb;
+  color: white;
+  border: 1px solid #61dafb;
+  box-shadow: 0 0 10px rgba(0,0,0,0.9);
+}
