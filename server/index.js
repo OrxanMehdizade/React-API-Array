@@ -84,10 +84,14 @@ app.get('/search-goods/:searchValue', (req, res) => {
 
 
 app.put('/change-goodsArray/:id',(req,res)=>{
-    let id=parseInt(req.params.id)
-    let index=goodsArray.findIndex((item)=> id === item.id)
-    goodsArray[index]=req.body
-    res.send(`Element with id ${id} was change`)
+    try{
+        let id=parseInt(req.params.id)
+        let index=goodsArray.findIndex((item)=> id === item.id)
+        goodsArray[index]=req.body
+        res.status(201).send(`Element with id ${id} was change`)
+    }catch (error){
+        res.status(410).send(`Element with id ${id} could not be modified`)
+    }
 })
 
 app.listen(HOST,()=>{

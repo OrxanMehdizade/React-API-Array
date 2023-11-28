@@ -57,7 +57,7 @@
 
 .editWindow{
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,6 +70,7 @@
   background-color: red;
   padding: 30px;
   border: 2px solid black;
+  border-radius: 20px;
 
 }
 

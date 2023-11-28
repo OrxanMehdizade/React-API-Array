@@ -2,11 +2,12 @@ import {useEffect, useState} from "react";
 
 function Admin() {
     let [arr,setArr]=useState([])
-    let [price,setPrice]=useState(null)// inputan gələn dəyəri bu state yazırıq
-    let [showModal,setShowModal]=useState(false)//editWindow pencərəsini açıb bağlamaq üçün yazdıqımız state
+    let [price,setPrice]=useState(null)
+    let [showModal,setShowModal]=useState(false)
     let [flag,setFlag]=useState(false)
-    let [changeObject,setChangeObject]=useState({})//edite clickledimiz zaman obyektin bura yaziriq
+    let [changeObject,setChangeObject]=useState({})
     const [searchValue, setSearchValue] = useState("");
+    let [editOk,setEditOk]=useState(false)
     const getData=()=>{
         fetch('http://localhost:5000/goodsArray')
             .then(res=>res.json())
@@ -57,44 +58,57 @@ function Admin() {
     }
 
     return (
-        <div className="Admin">
-            <input id='searchInput'
-                type="text"
-                placeholder="Search goods..."
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <ul className='adminUlClass'>
-                {arr.map((item)=>{
-                    return(
-                        <li key={item.id}>
-                            <p>{item.product_name}</p>
-                            <p>{item.product_description}</p>
-                            <p>{item.product_price}</p>
-                            <button id='adminEditBtn' onClick={()=> {
-                                setChangeObject(item)
-                                setShowModal(true)
-                            }}>Edit</button>
-                            <button id='adminDelBtn' onClick={()=>deleteGoodsArray(item)}>Delete</button>
-                            <br/>--------------------------------------------------
-                        </li>
+        <div>
+            <div className="Admin">
+                <input id='searchInput'
+                       type="text"
+                       placeholder="Search goods..."
+                       value={searchValue}
+                       onChange={(e) => setSearchValue(e.target.value)}
+                />
+                <ul className='adminUlClass'>
+                    {arr.map((item)=>{
+                        return(
+                            <li key={item.id}>
+                                <p>{item.product_name}</p>
+                                <p>{item.product_description}</p>
+                                <p>{item.product_price}</p>
+                                <button id='adminEditBtn' onClick={()=> {
+                                    setChangeObject(item)
+                                    setShowModal(true)
+                                }}>Edit</button>
+                                <button id='adminDelBtn' onClick={()=>deleteGoodsArray(item)}>Delete</button>
+                                <br/>--------------------------------------------------
+                            </li>
 
 
-                    )
-                })
+                        )
+                    })
 
-                }
-            </ul>
+                    }
+                </ul>
+            </div>
             { showModal && <div className='editWindow'>
+                <div>
+                    <input onChange={(event)=>setPrice(event.target.value)} type='number'/>
+                    <button onClick={()=> {
+                        setShowModal(false)
+                        setFlag(!flag)
+                        setEditOk(true)
+                        changeOfPrice()
+                    }}>Edit</button>
+                </div>
+
+                {editOk && <div className='editCheck'>
                     <div>
-                        <input onChange={(event)=>setPrice(event.target.value)} type='number'/>
+                        <input type='text'/>
                         <button onClick={()=> {
-                            setShowModal(false)
-                            setFlag(!flag)
-                            changeOfPrice()
-                        }}>Edit</button>
+                            setEditOk(false)
+                        }}>Exit</button>
                     </div>
                 </div>
+                }
+            </div>
             }
         </div>
     );
