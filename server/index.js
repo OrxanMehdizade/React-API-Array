@@ -59,21 +59,36 @@ app.get('/my-bag',(req,res)=>{
 })
 
 app.post('/add-goodsArray',(req,res)=>{
-    let obj=req.body
-    myBag.push(obj)
-    res.send(obj)
+    let obj
+    try{
+        obj=req.body
+        myBag.push(obj)
+        res.status(200).send(`${obj.product_name} has been added to myBag`)
+    }catch (err){
+        res.status(410).send(`${obj.product_name} could not be added to myBag`)
+    }
 })
 
 app.delete('/delete-goodsArray/:id',(req,res)=>{
-    let id=parseInt(req.params.id)
-    goodsArray=goodsArray.filter((item)=> id!==item.id)
-    res.send(`Element with id ${id} was deleted from goodsArray`)
+    let id
+    try {
+        id=parseInt(req.params.id)
+        goodsArray=goodsArray.filter((item)=> id!==item.id)
+        res.status(200).send(`Element with id ${id} was deleted from goodsArray`)
+    }catch (err){
+        res.status(500).send(`Item with id ${id} was not removed from goodsArray`)
+    }
 })
 
 app.delete('/delete-MYBAG/:id',(req,res)=>{
-    let id=parseInt(req.params.id)
-    myBag=myBag.filter((item)=> id!==item.id)
-    res.send(`Element with ${id} was deleted from bag`)
+    let id
+    try {
+        id = parseInt(req.params.id)
+        myBag = myBag.filter((item) => id !== item.id)
+        res.status(200).send(`Element with id ${id} was deleted from mybag`)
+    } catch (err) {
+        res.status(500).send(`Item with id ${id} was not removed from mybag`)
+    }
 })
 
 app.get('/search-goods/:searchValue', (req, res) => {
@@ -82,10 +97,10 @@ app.get('/search-goods/:searchValue', (req, res) => {
     res.json(filteredArray)
 })
 
-
 app.put('/change-goodsArray/:id',(req,res)=>{
+    let id
     try{
-        let id=parseInt(req.params.id)
+        id=parseInt(req.params.id)
         let index=goodsArray.findIndex((item)=> id === item.id)
         goodsArray[index]=req.body
         res.status(201).send(`Element with id ${id} was change`)

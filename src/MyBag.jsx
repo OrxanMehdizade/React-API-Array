@@ -1,13 +1,19 @@
 import {useEffect, useState} from "react";
-
+import {Spin} from "antd";
 function MyBag() {
     let [arr,setArr]=useState([])
     let [flag,setFlag]=useState(false)
+    let [editOk,setEditOk]=useState(false)
+    let [dataCheck,setDataCheck]=useState('')
+    const [loading, setLoading] = useState(true);
 
     const getData=()=>{
         fetch('http://localhost:5000/my-bag')
             .then(res=>res.json())
-            .then(data => setArr(data))
+            .then(data => {
+                setLoading(false)
+                setArr(data)
+            }).catch(()=>setLoading(true))
     }
 
     useEffect(() => {
@@ -19,29 +25,56 @@ function MyBag() {
             method:'DELETE',
         })
             .then(res=>res.text())
-            .then(data =>console.log(data))
+            .then(data =>setDataCheck(data))
         setFlag(!flag)
         getData();
     }
+
+
+    if (loading) {
+
+        return <Spin />;
+
+    }
+
+    if(arr.length===0) {
+
+        setLoading(true)
+    }
+
     return (
-        <div className="MyBag">
-            <ul className='mybagUlClass'>
-                {arr.map((item)=>{
-                    return(
-                        <li>
-                            <p>{item.product_name}</p>
-                            <p>{item.product_description}</p>
-                            <p>{item.product_price}</p>
-                            <button id='mybagBtnId' onClick={()=>deleteFromBag(item.id)}>Delete</button>
-                            <br/>--------------------------------------------------
-                        </li>
+        <div>
+            <div className="MyBag">
+                <ul className='mybagUlClass'>
+                    {arr.map((item)=>{
+                        return(
+                            <li>
+                                <p>{item.product_name}</p>
+                                <p>{item.product_description}</p>
+                                <p>{item.product_price}</p>
+                                <button id='mybagBtnId' onClick={()=> {
+                                    setEditOk(true)
+                                    deleteFromBag(item.id)
+                                }}>Delete</button>
+                                <br/>--------------------------------------------------
+                            </li>
 
 
-                    )
-                })
+                        )
+                    })
 
-                }
-            </ul>
+                    }
+                </ul>
+            </div>
+            {editOk && <div className='editCheck'>
+                <div>
+                    <p>{dataCheck}</p>
+                    <button onClick={()=> {
+                        setEditOk(false)
+                    }}>Exit</button>
+                </div>
+            </div>
+            }
         </div>
     );
 }

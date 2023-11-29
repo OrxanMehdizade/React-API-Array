@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {Spin} from "antd";
 
 function Admin() {
     let [arr,setArr]=useState([])
@@ -8,10 +9,16 @@ function Admin() {
     let [changeObject,setChangeObject]=useState({})
     const [searchValue, setSearchValue] = useState("");
     let [editOk,setEditOk]=useState(false)
+    let [dataCheck,setDataCheck]=useState('')
+    const [loading, setLoading] = useState(true);
     const getData=()=>{
         fetch('http://localhost:5000/goodsArray')
             .then(res=>res.json())
-            .then(data => setArr(data))
+            .then(data => {
+                setLoading(false)
+                setArr(data)
+            })
+            .catch(()=>setLoading(true))
     }
 
     const getSearch=()=>{
@@ -24,7 +31,7 @@ function Admin() {
         getData();
         getSearch()
 
-    }, [searchValue,flag]);
+    }, [flag]);
 
     const changeOfPrice=()=>{
         let obj={...changeObject,'product_price':parseInt(price)}
@@ -35,8 +42,8 @@ function Admin() {
             },
             body:JSON.stringify(obj)
         })
-            .then(res=>res.json())
-            .then(data =>console.log(data))
+            .then(res=>res.text())
+            .then(data =>setDataCheck(data))
     }
 
 
@@ -48,15 +55,21 @@ function Admin() {
             method:'DELETE',
         })
             .then(res=>res.text())
-            .then(data =>console.log(data))
+            .then(data =>setDataCheck(data))
         setFlag(!flag)
     }
 
 
-    if(arr.length===0){
-        return <p className='download'>Download</p>
+    if (loading) {
+
+        return <Spin />;
+
     }
 
+    if(arr.length===0) {
+
+        setLoading(true)
+    }
     return (
         <div>
             <div className="Admin">
@@ -64,7 +77,10 @@ function Admin() {
                        type="text"
                        placeholder="Search goods..."
                        value={searchValue}
-                       onChange={(e) => setSearchValue(e.target.value)}
+                       onChange={(e) => {
+                           setSearchValue(e.target.value)
+                           setFlag(!flag)
+                       }}
                 />
                 <ul className='adminUlClass'>
                     {arr.map((item)=>{
@@ -77,7 +93,10 @@ function Admin() {
                                     setChangeObject(item)
                                     setShowModal(true)
                                 }}>Edit</button>
-                                <button id='adminDelBtn' onClick={()=>deleteGoodsArray(item)}>Delete</button>
+                                <button id='adminDelBtn' onClick={()=> {
+                                    deleteGoodsArray(item)
+                                    setEditOk(true)
+                                }}>Delete</button>
                                 <br/>--------------------------------------------------
                             </li>
 
@@ -94,20 +113,19 @@ function Admin() {
                     <button onClick={()=> {
                         setShowModal(false)
                         setFlag(!flag)
-                        setEditOk(true)
                         changeOfPrice()
+                        setEditOk(true)
                     }}>Edit</button>
                 </div>
-
-                {editOk && <div className='editCheck'>
-                    <div>
-                        <input type='text'/>
-                        <button onClick={()=> {
-                            setEditOk(false)
-                        }}>Exit</button>
-                    </div>
+            </div>
+            }
+            {editOk && <div className='editCheck'>
+                <div>
+                    <p>{dataCheck}</p>
+                    <button onClick={()=> {
+                        setEditOk(false)
+                    }}>Exit</button>
                 </div>
-                }
             </div>
             }
         </div>
